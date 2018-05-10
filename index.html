@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Loso - Simple, Clean, and Responsive Website</title>
+        <title>Neural Net - Iris Demo</title>
 
         <meta charset="utf-8">
 
@@ -10,27 +10,163 @@
         <!-- Google Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i|Source+Sans+Pro:300,300i,400,400i,600,600i,700,700i,900,900i" rel="stylesheet">
 
-        <!-- CSS -->
         <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-        <link rel="stylesheet" type="text/css" href="style.css">
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+
+        <!-- MathJax -->
+        <script type="text/x-mathjax-config">
+            MathJax.Hub.Config({
+                TeX: {
+                    TagSide: "right"
+                },
+                tex2jax: {
+                    inlineMath: [ ['$','$'], ['\\(','\\)'] ],
+                    processEscapes: true
+                },
+                jax: ["input/TeX", "output/CHTML"],
+                CommonHTML: {
+                    scale: 130,
+                    linebreaks: { automatic: true },
+                    width: "80% container"
+                }
+            });
+        </script>
+        <script type="text/javascript" async
+                src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+        </script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     </head>
-    <body ng-controller="demoController">
-        <matrix id="matrix-1"/>
-<!--
-        <div align=center>
-            <table class="matrix">
-                <tr>
-                    <td>1+3i</td>
-                    <td>2+i</td>
-                    <td>10</td>
-                </tr>
-                <tr>
-                    <td>4-3i</td>
-                    <td>5</td>
-                    <td>-2</td>
-                </tr>
-            </table>
+    <body>
+        <div class="container">
+            <div class="row"> <!-- Title -->
+                <div class="col-md-8 col-md-offset-4">
+                    <h2 id="title">Iris DataSet Demo Net</h2>
+                </div>
+            </div>
+            <div class="row"> <!-- Net parameters -->
+                <div class="col-md-3 col-md-offset-5">
+                    <label>Number of Layers:</label>
+                    <select id="num-layers">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label>Nonlinearity:</label>
+                    <select id="nonlin-type">
+                        <option value="linear">Linear</option>
+                        <option value="sigmoid">Sigmoid</option>
+                        <option value="softplus">Softplus</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row"> <!-- Single Layer -->
+                <div class="col-md-1">
+                    \begin{bmatrix}
+                    a \\
+                    b \\
+                    c \\
+                    d \\
+                    \end{bmatrix}
+                    <h3>$$x$$</h3>
+                </div>
+                <div class="col-md-1">
+                    arrow
+                </div>
+                <div class="col-md-2">
+                    \begin{bmatrix}
+                    a & b & c & d \\
+                    d & e & f & e \\
+                    g & h & i & f \\
+                    \end{bmatrix}
+                </div>
+                <div class="col-md-1">
+                    non-lin
+                </div>
+                <div class="col-md-1">
+                    \begin{bmatrix}
+                    a \\ 
+                    b \\
+                    c \\
+                    \end{bmatrix}
+                    <h3>$$y$$</h3>
+                </div>
+                <div class="col-md-1">
+                    \begin{bmatrix}
+                    a* \\ 
+                    b* \\
+                    c* \\
+                    \end{bmatrix}
+                    <h3>$$y*$$</h3>
+                </div>
+
+            </div>
+            <div class="row"> <!-- Double Layer -->
+                <div class="col-md-1">
+                    \begin{bmatrix}
+                    a \\
+                    b \\
+                    c \\
+                    d \\
+                    \end{bmatrix}
+                    <h3>$$x$$</h3>
+                </div>
+                <div class="col-md-1">
+                    arrow
+                </div>
+                <div class="col-md-2">
+                    \begin{bmatrix}
+                    a & b & c & d \\
+                    d & e & f & e \\
+                    g & h & i & f \\
+                    \end{bmatrix}
+                </div>
+                <div class="col-md-1">
+                    non-lin
+                </div>
+                <div class="col-md-2">
+                    \begin{bmatrix}
+                    a & b & c \\
+                    d & e & f \\
+                    g & h & i \\
+                    \end{bmatrix}
+                </div>
+                <div class="col-md-1">
+                    non-lin
+                </div>
+                <div class="col-md-1">
+                    \begin{bmatrix}
+                    a \\ 
+                    b \\
+                    c \\
+                    \end{bmatrix}
+                    <h3>$$y$$</h3>
+                </div>
+                <div class="col-md-1">
+                    \begin{bmatrix}
+                    a* \\ 
+                    b* \\
+                    c* \\
+                    \end{bmatrix}
+                    <h3>$$y*$$</h3>
+                </div>
+            </div>
+            <div class="row"> <!-- Controls -->
+                <div id="next-input" class="col-md-2 col-md-offset-4">
+                    <button class="btn btn-default">Next Input</button>
+                </div>
+                <div id="forward" class="col-md-2">
+                    <button class="btn btn-default">Predict</button>
+                </div>
+                <div id="backward" class="col-md-2">
+                    <button class="btn btn-default">Adjust</button>
+                </div>
+                <div id="iterate-1000" class="col-md-2">
+                    <button class="btn btn-default">Skip 1000!</button>
+                </div>
+            </div>
         </div>
--->
+
     </body>
 </html>

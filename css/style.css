@@ -1,20 +1,16 @@
 
-.matrix {
-    position: relative;
+.row {
+    padding-top: 20px;
+    padding-bottom: 30px;
 }
-.matrix:before, .matrix:after {
-    content: "";
-    position: absolute;
-    top: 0;
-    border: 1px solid #000;
-    width: 6px;
-    height: 100%;
+
+// Title
+#title {
+   font-size: 30px; 
 }
-.matrix:before {
-    left: -6px;
-    border-right: 0;
-}
-.matrix:after {
-    right: -6px;
-    border-left: 0;
-}
+
+
+
+
+
+
