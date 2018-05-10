@@ -36,6 +36,7 @@
         </script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="js/custom.js"></script>
     </head>
     <body>
         <div class="container">
@@ -47,21 +48,21 @@
             <div class="row"> <!-- Net parameters -->
                 <div class="col-md-3 col-md-offset-5">
                     <label>Number of Layers:</label>
-                    <select id="num-layers">
+                    <select id="num-layers" onchange="changeNumLayers()">
                         <option value="1">1</option>
                         <option value="2">2</option>
                     </select>
                 </div>
                 <div class="col-md-3">
                     <label>Nonlinearity:</label>
-                    <select id="nonlin-type">
+                    <select id="nonlin-type" onchange="changeNonLinearity()">
                         <option value="linear">Linear</option>
                         <option value="sigmoid">Sigmoid</option>
                         <option value="softplus">Softplus</option>
                     </select>
                 </div>
             </div>
-            <div class="row"> <!-- Single Layer -->
+            <div id="net-1" class="row"> <!-- Single Layer -->
                 <div class="col-md-1">
                     \begin{bmatrix}
                     a \\
@@ -72,7 +73,7 @@
                     <h3>$$x$$</h3>
                 </div>
                 <div class="col-md-1">
-                    arrow
+                    <img src="images/linear.png">
                 </div>
                 <div class="col-md-2">
                     \begin{bmatrix}
@@ -82,7 +83,7 @@
                     \end{bmatrix}
                 </div>
                 <div class="col-md-1">
-                    non-lin
+                    <img id="net-1-nonlin-1" src="images/linear.png">
                 </div>
                 <div class="col-md-1">
                     \begin{bmatrix}
@@ -102,7 +103,7 @@
                 </div>
 
             </div>
-            <div class="row"> <!-- Double Layer -->
+            <div id="net-2" class="row"> <!-- Double Layer -->
                 <div class="col-md-1">
                     \begin{bmatrix}
                     a \\
@@ -113,7 +114,7 @@
                     <h3>$$x$$</h3>
                 </div>
                 <div class="col-md-1">
-                    arrow
+                    <img src="images/linear.png">
                 </div>
                 <div class="col-md-2">
                     \begin{bmatrix}
@@ -123,7 +124,7 @@
                     \end{bmatrix}
                 </div>
                 <div class="col-md-1">
-                    non-lin
+                    <img id="net-2-nonlin-1" src="images/linear.png">
                 </div>
                 <div class="col-md-2">
                     \begin{bmatrix}
@@ -133,7 +134,7 @@
                     \end{bmatrix}
                 </div>
                 <div class="col-md-1">
-                    non-lin
+                    <img id="net-2-nonlin-2" src="images/linear.png">
                 </div>
                 <div class="col-md-1">
                     \begin{bmatrix}
