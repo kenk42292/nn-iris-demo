@@ -31,30 +31,46 @@ function changeNonLinearity() { //eslint-disable-line no-unused-vars
 }
 
 /* control buttons */
+function init() { //eslint-disable-line no-unused-vars
+    if (isNet1()) {
+        var net1mat1 = MathJax.Hub.getAllJax("net-1-mat-1");
+        MathJax.Hub.Queue(["Text", net1mat1[0], matrix2Str(randMatrix(3, 4, 2))]);
+    }
+    if (isNet2()) {
+        var net2mat1 = MathJax.Hub.getAllJax("net-2-mat-1");
+        MathJax.Hub.Queue(["Text", net2mat1[0], matrix2Str(randMatrix(3, 4, 2))]);
+        var net2mat2 = MathJax.Hub.getAllJax("net-2-mat-2");
+        MathJax.Hub.Queue(["Text", net2mat2[0], matrix2Str(randMatrix(3, 3, 2))]);
+    }
+}
+
 function nextSample() { //eslint-disable-line no-unused-vars
     var sample = globalData[Math.floor(Math.random()*globalData.length)];
     var sampleX = sample.slice(0, 4);
     var sampleY = [0.0, 0.0, 0.0];
     sampleY[sample[4]] = 1.0;
-    
+
     /* Net-1 sample */
     var net1math = MathJax.Hub.getAllJax("net-1");
     MathJax.Hub.Queue(["Text", net1math[0], vector2Str(sampleX)]);
     MathJax.Hub.Queue(["Text", net1math[net1math.length-2], vector2Str(sampleY)]);
-    
+
     /* Net-2 sample */
     var net2math = MathJax.Hub.getAllJax("net-2");
     MathJax.Hub.Queue(["Text", net2math[0], vector2Str(sampleX)]);
     MathJax.Hub.Queue(["Text", net2math[net2math.length-2], vector2Str(sampleY)]);
 }
 
+function predict() { //eslint-disable-line no-unused-vars
+}
+
 /* helper functions */
 function isNet1() { //eslint-disable-line no-unused-vars
-    return document.getElementById("num-layers").value() === "1";
+    return document.getElementById("num-layers").value === "1";
 }
 
 function isNet2() { //eslint-disable-line no-unused-vars
-    return document.getElementById("num-layers").value() === "2";
+    return document.getElementById("num-layers").value === "2";
 }
 
 function vector2Str(vector) {
@@ -66,9 +82,32 @@ function vector2Str(vector) {
     s = s.concat("\\end{bmatrix}");
     return s;
 }
-    
+
 function matrix2Str(matrix) {
-    
+    var s = "\\begin{bmatrix} ";
+    for (var i=0; i<matrix.length; i++) {
+        var delim = "";
+        for (var j=0; j<matrix[i].length; j++) {
+            s = s.concat(delim);
+            s = s.concat(matrix[i][j].toFixed(1));
+            delim = " & ";
+        }
+        s = s.concat(" \\\\ ");
+    }
+    s = s.concat(" \\end{bmatrix}");
+    return s;
+}
+
+function randMatrix(height, width, scale) {
+    var mat = [];
+    for (var i=0; i<height; i++) {
+        var row = [];
+        for (var j=0; j<width; j++) {
+            row.push((Math.random()-0.5)*scale);
+        }
+        mat.push(row);
+    }
+    return mat;
 }
 
 var globalData = [];
@@ -89,3 +128,6 @@ $.ajax({
         }
     }
 });
+
+
+

@@ -25,7 +25,7 @@
                 },
                 jax: ["input/TeX", "output/CHTML"],
                 CommonHTML: {
-                    scale: 100,
+                    scale: 70,
                     linebreaks: { automatic: true },
                     width: "100% container"
                 }
@@ -75,7 +75,7 @@
                 <div class="col-md-1">
                     <img class="transition" src="images/linear.png">
                 </div>
-                <div class="col-md-2">
+                <div id="net-1-mat-1" class="col-md-2">
                     \begin{bmatrix}
                     a & b & c & d \\
                     d & e & f & e \\
@@ -103,7 +103,7 @@
                 </div>
 
             </div>
-            <div id="net-2" style="display:none" class="row"> <!-- Double Layer -->
+            <div id="net-2" style="display:none" class="row">
                 <div class="col-md-1">
                     \begin{bmatrix}
                     a \\
@@ -116,7 +116,7 @@
                 <div class="col-md-1">
                     <img class="transition" src="images/linear.png">
                 </div>
-                <div class="col-md-2">
+                <div id="net-2-mat-1" class="col-md-2">
                     \begin{bmatrix}
                     a & b & c & d \\
                     d & e & f & e \\
@@ -126,7 +126,7 @@
                 <div class="col-md-1">
                     <img id="net-2-nonlin-1" class="transition" src="images/linear.png">
                 </div>
-                <div class="col-md-2">
+                <div id="net-2-mat-2" class="col-md-2">
                     \begin{bmatrix}
                     a & b & c \\
                     d & e & f \\
@@ -154,7 +154,10 @@
                 </div>
             </div>
             <div class="row"> <!-- Controls -->
-                <div id="next-sample" class="col-md-2 col-md-offset-4">
+                <div id="next-sample" class="col-md-2 col-md-offset-2">
+                    <button class="btn btn-default" onclick="init()">Initialize</button>
+                </div>
+                <div id="next-sample" class="col-md-2">
                     <button class="btn btn-default" onclick="nextSample()">Next Sample</button>
                 </div>
                 <div id="forward" class="col-md-2">
