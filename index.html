@@ -25,9 +25,9 @@
                 },
                 jax: ["input/TeX", "output/CHTML"],
                 CommonHTML: {
-                    scale: 130,
+                    scale: 100,
                     linebreaks: { automatic: true },
-                    width: "80% container"
+                    width: "100% container"
                 }
             });
         </script>
@@ -73,7 +73,7 @@
                     <h3>$$x$$</h3>
                 </div>
                 <div class="col-md-1">
-                    <img src="images/linear.png">
+                    <img class="transition" src="images/linear.png">
                 </div>
                 <div class="col-md-2">
                     \begin{bmatrix}
@@ -83,7 +83,7 @@
                     \end{bmatrix}
                 </div>
                 <div class="col-md-1">
-                    <img id="net-1-nonlin-1" src="images/linear.png">
+                    <img id="net-1-nonlin-1" class="transition" src="images/linear.png">
                 </div>
                 <div class="col-md-1">
                     \begin{bmatrix}
@@ -103,7 +103,7 @@
                 </div>
 
             </div>
-            <div id="net-2" class="row"> <!-- Double Layer -->
+            <div id="net-2" style="display:none" class="row"> <!-- Double Layer -->
                 <div class="col-md-1">
                     \begin{bmatrix}
                     a \\
@@ -114,7 +114,7 @@
                     <h3>$$x$$</h3>
                 </div>
                 <div class="col-md-1">
-                    <img src="images/linear.png">
+                    <img class="transition" src="images/linear.png">
                 </div>
                 <div class="col-md-2">
                     \begin{bmatrix}
@@ -124,7 +124,7 @@
                     \end{bmatrix}
                 </div>
                 <div class="col-md-1">
-                    <img id="net-2-nonlin-1" src="images/linear.png">
+                    <img id="net-2-nonlin-1" class="transition" src="images/linear.png">
                 </div>
                 <div class="col-md-2">
                     \begin{bmatrix}
@@ -134,7 +134,7 @@
                     \end{bmatrix}
                 </div>
                 <div class="col-md-1">
-                    <img id="net-2-nonlin-2" src="images/linear.png">
+                    <img id="net-2-nonlin-2" class="transition" src="images/linear.png">
                 </div>
                 <div class="col-md-1">
                     \begin{bmatrix}
@@ -154,17 +154,17 @@
                 </div>
             </div>
             <div class="row"> <!-- Controls -->
-                <div id="next-input" class="col-md-2 col-md-offset-4">
-                    <button class="btn btn-default">Next Input</button>
+                <div id="next-sample" class="col-md-2 col-md-offset-4">
+                    <button class="btn btn-default" onclick="nextSample()">Next Sample</button>
                 </div>
                 <div id="forward" class="col-md-2">
-                    <button class="btn btn-default">Predict</button>
+                    <button class="btn btn-default" onclick="predict()">Predict</button>
                 </div>
                 <div id="backward" class="col-md-2">
-                    <button class="btn btn-default">Adjust</button>
+                    <button class="btn btn-default" onclick="adjust()">Adjust</button>
                 </div>
                 <div id="iterate-1000" class="col-md-2">
-                    <button class="btn btn-default">Skip 1000!</button>
+                    <button class="btn btn-default" onclick="skip()">Skip 1000!</button>
                 </div>
             </div>
         </div>
