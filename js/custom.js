@@ -49,48 +49,52 @@ function init() { //eslint-disable-line no-unused-vars
 
 function nextSample() { //eslint-disable-line no-unused-vars
     var sample = globalData[Math.floor(Math.random()*globalData.length)];
-    globalX = strVec2Vec(sample.slice(0, 4));
-    globalYstar = [0.0, 0.0, 0.0];
-    globalYstar[sample[4]] = 1.0;
+    globalX = [];
+    for (var i=0; i<4; i++) { // column vector as 2D matrix
+        globalX.push([parseFloat(sample[i]),]);
+    }
+    globalYstar = [[0.0,], [0.0,], [0.0,]]; // column vector as 2D matrix
+    globalYstar[sample[4]][0] = 1.0;
 
     /* Net-1 sample */
     var net1mathJax = MathJax.Hub.getAllJax("net-1");
-    MathJax.Hub.Queue(["Text", net1mathJax[0], vector2Str(globalX)]);
-    MathJax.Hub.Queue(["Text", net1mathJax[net1mathJax.length-2], vector2Str(globalYstar)]);
+    MathJax.Hub.Queue(["Text", net1mathJax[0], matrix2Str(globalX)]);
+    MathJax.Hub.Queue(["Text", net1mathJax[net1mathJax.length-2], matrix2Str(globalYstar)]);
 
     /* Net-2 sample */
     var net2mathJax = MathJax.Hub.getAllJax("net-2");
-    MathJax.Hub.Queue(["Text", net2mathJax[0], vector2Str(globalX)]);
-    MathJax.Hub.Queue(["Text", net2mathJax[net2mathJax.length-2], vector2Str(globalYstar)]);
+    MathJax.Hub.Queue(["Text", net2mathJax[0], matrix2Str(globalX)]);
+    MathJax.Hub.Queue(["Text", net2mathJax[net2mathJax.length-2], matrix2Str(globalYstar)]);
 }
 
 function predict() { //eslint-disable-line no-unused-vars
     if (isNet1()) {
-        globalZ1 = multMatVec(net1mat1, globalX);
+        globalZ1 = multMat(net1mat1, globalX);
         globalY1 = applyNonlin(globalZ1);
-
+        globalYhat = softmax(globalY1);
         var net1ymathJax = MathJax.Hub.getAllJax("net-1-y");
-        MathJax.Hub.Queue(["Text", net1ymathJax[0], vector2Str(globalY1)]);
+        MathJax.Hub.Queue(["Text", net1ymathJax[0], matrix2Str(globalYhat)]);
     } else if (isNet2()) {
-        globalZ1 = multMatVec(net2mat1, globalX);
+        globalZ1 = multMat(net2mat1, globalX);
         globalY1 = applyNonlin(globalZ1);
 
-        globalZ2 = multMatVec(net2mat2, globalY1);
+        globalZ2 = multMat(net2mat2, globalY1);
         globalY2 = applyNonlin(globalZ2);
 
+        globalYhat = softmax(globalY2);
         var net2ymathJax = MathJax.Hub.getAllJax("net-2-y");
-        MathJax.Hub.Queue(["Text", net2ymathJax[0], vector2Str(globalY2)]);
+        MathJax.Hub.Queue(["Text", net2ymathJax[0], matrix2Str(globalYhat)]);
     }
 }
 
-function backprop() {
-    if (isNet1()) {
-        var d = globalY1 - globalYstar;
-        var dy = sigmoid_prime(globalZ1);
-        var 
-        
-    }
-}
+//function backprop() {
+//    if (isNet1()) {
+//        var d = globalY1 - globalYstar;
+//        var dy = sigmoid_prime(globalZ1);
+//        var 
+//        
+//    }
+//}
 
 /* helper functions */
 function isNet1() { //eslint-disable-line no-unused-vars
@@ -124,26 +128,24 @@ function softplus(x) {
     return Math.log(1.0 + Math.exp(x));
 }
 
+function softmax(x) {
+    var r = [];
+    var total = 0.0;
+    for (var i=0; i<x.length; i++) {
+        var u = Math.exp(x[i][0]);
+        r.push(u);
+        total += u;
+    }
+    
+    var result = [];
+    for (i=0; i<r.length; i++) {
+        result.push([r[i]/total]);
+    }
+    return result;
+}
+
 function sigmoid_prime(x) {
     return sigmoid(x)*(1.0-sigmoid(x));
-}
-
-function strVec2Vec(vector) {
-    var v = [];
-    for (var i=0; i<vector.length; i++) {
-        v.push(parseFloat(vector[i]));
-    }
-    return v;
-}
-
-function vector2Str(vector) {
-    var s = "\\begin{bmatrix}";
-    for (var i=0; i<vector.length; i++) {
-        s = s.concat(vector[i].toFixed(1));
-        s = s.concat("\\\\");
-    }
-    s = s.concat("\\end{bmatrix}");
-    return s;
 }
 
 function matrix2Str(matrix) {
@@ -152,7 +154,7 @@ function matrix2Str(matrix) {
         var delim = "";
         for (var j=0; j<matrix[i].length; j++) {
             s = s.concat(delim);
-            s = s.concat(matrix[i][j].toFixed(1));
+            s = s.concat(matrix[i][j].toFixed(2));
             delim = " & ";
         }
         s = s.concat(" \\\\ ");
@@ -173,15 +175,18 @@ function randMatrix(height, width, scale) {
     return mat;
 }
 
-// Multiples a 2d matrix with a 1d vector, returns result as 1d vector
-function multMatVec(mat, vec) {
+function multMat(mat1, mat2) {
     var result = [];
-    for (var i=0; i<mat.length; i++) {
-        var elem = 0;
-        for (var j=0; j<mat[i].length; j++) {
-            elem += mat[i][j]*vec[j];
+    for (var i=0; i<mat1.length; i++) { // i: rows of mat1
+        var row = [];
+        for (var k=0; k<mat2[0].length; k++) { // k: columns of mat2
+            var elem = 0;
+            for (var j=0; j<mat1[0].length; j++) { // j: columns of mat1, rows of mat2
+                elem += mat1[i][j]*mat2[j][k];
+            }
+            row.push(elem);
         }
-        result.push(elem);
+        result.push(row);
     }
     return result;
 }
@@ -203,6 +208,7 @@ var globalZ1;
 var globalY1;
 var globalZ2;
 var globalY2;
+var globalYhat;
 var globalYstar;
 
 /* Load data for training and testing */
