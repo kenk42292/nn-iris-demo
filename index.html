@@ -85,7 +85,7 @@
                 <div class="col-md-1">
                     <img id="net-1-nonlin-1" class="transition" src="images/linear.png">
                 </div>
-                <div class="col-md-1">
+                <div id="net-1-y" class="col-md-1">
                     \begin{bmatrix}
                     a \\ 
                     b \\
@@ -93,7 +93,7 @@
                     \end{bmatrix}
                     <h3>$$y$$</h3>
                 </div>
-                <div class="col-md-1">
+                <div id="net-1-ystar" class="col-md-1">
                     \begin{bmatrix}
                     a* \\ 
                     b* \\
@@ -136,7 +136,7 @@
                 <div class="col-md-1">
                     <img id="net-2-nonlin-2" class="transition" src="images/linear.png">
                 </div>
-                <div class="col-md-1">
+                <div id="net-2-y" class="col-md-1">
                     \begin{bmatrix}
                     a \\ 
                     b \\
@@ -144,7 +144,7 @@
                     \end{bmatrix}
                     <h3>$$y$$</h3>
                 </div>
-                <div class="col-md-1">
+                <div id="net-2-ystar" class="col-md-1">
                     \begin{bmatrix}
                     a* \\ 
                     b* \\
@@ -164,10 +164,10 @@
                     <button class="btn btn-default" onclick="predict()">Predict</button>
                 </div>
                 <div id="backward" class="col-md-2">
-                    <button class="btn btn-default" onclick="adjust()">Adjust</button>
+                    <button class="btn btn-default" onclick="backprop()">Adjust</button>
                 </div>
                 <div id="iterate-1000" class="col-md-2">
-                    <button class="btn btn-default" onclick="skip()">Skip 1000!</button>
+                    <button class="btn btn-default" onclick="skip()">Process 10</button>
                 </div>
             </div>
         </div>
