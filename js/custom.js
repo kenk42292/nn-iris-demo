@@ -30,6 +30,21 @@ function changeNonLinearity() { //eslint-disable-line no-unused-vars
     }
 }
 
+function changeMode() { //eslint-disable-line no-unused-vars
+    var mode = document.getElementById("mode").value;
+    if (mode === "training") {
+        document.getElementById("adjust-button").style.display="block";
+        document.getElementById("train-button").style.display="block";
+        document.getElementById("validate-button").style.display="none";
+        document.getElementById("accuracy").style.display="none";
+    } else {
+        document.getElementById("adjust-button").style.display="none";
+        document.getElementById("train-button").style.display="none";
+        document.getElementById("validate-button").style.display="block";
+        document.getElementById("accuracy").style.display="block";
+    }
+}
+
 /* control buttons */
 function init() { //eslint-disable-line no-unused-vars
     // intialize rmsProp learning rate params
@@ -39,7 +54,7 @@ function init() { //eslint-disable-line no-unused-vars
     net2_avg_grad_sq_b1 = null;
     net2_avg_grad_sq_w2 = null;
     net2_avg_grad_sq_b2 = null;
-    
+
     // initialize nets
     if (isNet1()) {
         var net1layer1Jax = MathJax.Hub.getAllJax("net-1-layer-1");
@@ -65,7 +80,14 @@ function init() { //eslint-disable-line no-unused-vars
 }
 
 function nextSample(display) { //eslint-disable-line no-unused-vars
-    var sample = globalData[Math.floor(Math.random()*globalData.length)];
+    var mode = document.getElementById("mode").value;
+    var sample;
+    if (mode === "training") {
+        sample = trainingData[Math.floor(Math.random()*trainingData.length)];
+    } else {
+        sample = validationData[Math.floor(Math.random()*validationData.length)];
+    }
+
     x = [];
     for (var i=0; i<4; i++) { // column vector as 2D matrix
         x.push([parseFloat(sample[i]),]);
@@ -168,8 +190,8 @@ function backprop(display) { //eslint-disable-line no-unused-vars
     }
 }
 
-function skip(numSkips) { //eslint-disable-line no-unused-vars
-    for (var i=0; i<numSkips; i++) {
+function train(iters) { //eslint-disable-line no-unused-vars
+    for (var i=0; i<iters; i++) {
         nextSample(false);
         predict(false);
         backprop(false);
@@ -177,6 +199,27 @@ function skip(numSkips) { //eslint-disable-line no-unused-vars
     nextSample(true);
     predict(true);
     backprop(true);
+}
+
+function validate() { //eslint-disable-line no-unused-vars
+    var numCorrect = 0.0;
+    var sample;
+    for (var i=0; i<validationData.length; i++) {
+        sample = validationData[i];
+        x = [];
+        for (var j=0; j<4; j++) { // column vector as 2D matrix
+            x.push([parseFloat(sample[j]),]);
+        }
+        ystar = [[0.0,], [0.0,], [0.0,]]; // column vector as 2D matrix
+        ystar[sample[4]][0] = 1.0;
+        
+        predict(false);
+        if (argmax(ystar) === argmax(yhat)) {
+            numCorrect += 1.0;
+        }
+    }
+    var accuracy = numCorrect / validationData.length;
+    document.getElementById("accuracy").innerHTML = "Accuracy: " + accuracy;
 }
 
 /* helper functions */
@@ -253,6 +296,18 @@ function softmax(vector) {
 
 function sigmoid_prime(x) {
     return sigmoid(x)*(1.0-sigmoid(x));
+}
+
+function argmax(vector) {
+    var maxIndex = 0;
+    var maxVal = null;
+    for (var i=0; i<vector.length; i++) {
+        if (maxVal == null || vector[i][0] > maxVal) {
+            maxIndex = i;
+            maxVal = vector[i][0];
+        }
+    }
+    return maxIndex;
 }
 
 function matrix2Str(matrix) {
@@ -340,7 +395,7 @@ function elemWiseAdd(mat1, mat2) {
 // USE: net1_avg_grad_sq_w1, net1mat1 = rmsProp(net1mat1, net1_avg_grad_sq_w1, dLdw)
 function rmsProp(current_mat, avg_sq_mat, gradient_mat) {
     var i, j, row;
-    
+
     // avg_sq_mat update
     var result_avg_sq_mat = [];
     if (avg_sq_mat == null) {
@@ -354,7 +409,7 @@ function rmsProp(current_mat, avg_sq_mat, gradient_mat) {
             result_avg_sq_mat.push(row);
         }
     }
-    
+
     // result calculation
     var result = [];
     for (i=0; i<current_mat.length; i++) {
@@ -364,7 +419,7 @@ function rmsProp(current_mat, avg_sq_mat, gradient_mat) {
         }
         result.push(r);
     }
-    
+
     return [result_avg_sq_mat, result];
 }
 
@@ -405,7 +460,8 @@ function copy_mat(mat) {
 }
 
 // data
-var globalData = [];
+var trainingData = [];
+var validationData = [];
 var iris2index = {"Iris-setosa":0, "Iris-versicolor":1, "Iris-virginica":2};
 
 // hyper-params
@@ -439,7 +495,11 @@ $.ajax({
             if (line.length === 5) {
                 var sample = line.slice(0, 4);
                 sample.push(iris2index[line[4]]);
-                globalData.push(sample);
+                if (i%3==0) {
+                    validationData.push(sample);
+                } else {
+                    trainingData.push(sample);
+                }
             }
         }
     }

@@ -46,19 +46,26 @@
                 </div>
             </div>
             <div class="row"> <!-- Net parameters -->
-                <div class="col-md-3 col-md-offset-5">
+                <div class="col-md-2 col-md-offset-5">
                     <label>Number of Layers:</label>
                     <select id="num-layers" onchange="changeNumLayers()">
                         <option value="1">1</option>
                         <option value="2">2</option>
                     </select>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <label>Nonlinearity:</label>
                     <select id="nonlin-type" onchange="changeNonLinearity()">
                         <option value="linear">Linear</option>
                         <option value="sigmoid">Sigmoid</option>
                         <option value="softplus">Softplus</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label>Mode:</label>
+                    <select id="mode" onchange="changeMode()">
+                        <option value="training">Training</option>
+                        <option value="validation">Validation</option>
                     </select>
                 </div>
             </div>
@@ -209,10 +216,12 @@
                     <button class="btn btn-default" onclick="predict(true)">Predict</button>
                 </div>
                 <div class="col-md-2">
-                    <button class="btn btn-default" onclick="backprop(true)">Adjust</button>
+                    <button id="adjust-button" class="btn btn-default" onclick="backprop(true)">Adjust</button>
+                    <button id="validate-button" class="btn btn-default" style="display:none" onclick="validate()">Validate</button>
                 </div>
                 <div class="col-md-2">
-                    <button class="btn btn-default" onclick="skip(5000)">Process</button>
+                    <button id="train-button" class="btn btn-default" onclick="train(1000)">Train x 1000</button>
+                    <p id="accuracy" style="display:none" >Accuracy: </p>
                 </div>
             </div>
         </div>
